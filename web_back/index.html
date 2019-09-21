@@ -12,14 +12,17 @@
     <link rel="stylesheet" href="css/main.css">
     <script src="./js/lib/jquery-1.12.4.min.js"></script>
     <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 配置文件:接口信息 -->
+    <script src="./js/util/config.js"></script>
+    <script src="./js/util/user.js"></script>
 </head>
 
 <body>
     <div class="sider">
         <a href="#" class="logo"><img src="images/logo02.png" alt="logo"></a>
         <div class="user_info">
-            <img src="images/2.jpg" alt="person">
-            <span>欢迎&nbsp;&nbsp;李思思</span>
+            <img id="user_pic" src="images/2.jpg" alt="person">
+            <span>欢迎&nbsp;&nbsp; <i style="font-style: normal;" id="nickname"></i></span>
             <b>管理员</b>
         </div>
         <div class="menu">
@@ -50,7 +53,7 @@
         </form>
         <div class="user_center_link">
             <a href="user.html" onclick="setMenu(3,0)" target="main_frame">个人中心</a>
-            <img src="images/2.jpg" alt="person">
+            <img id="user_pics" src="images/2.jpg" alt="person">
             <a href="#" id="logOut"><i class="iconfont icon-tuichu"></i> 退出</a>
         </div>
     </div>
@@ -132,16 +135,28 @@
 
     </script>
 
+
     <script>
+        //獲取用戶信息功能
+        $(function(){
+            user.loginfo(function(res){
+                if(res.code == 200){
+                   $('#nickname').text(res.data.nickname);
+                   $('#user_pic').attr('src',res.data.user_pic);
+                   $('#user_pics').attr('src',res.data.user_pic);
+               }
+            });
+        })
+
         //登出功能
         $('#logOut').click(function () {
             $('#login_p').text('確定要退出嗎!!!');
             $('.loginIn').modal('show');
-
             $('.btn').click(function(){
-                $.post('http://localhost:8000/admin/logout',function(res){
+                user.logout(function(){
                     window.location.href = './login.html';    
                 });
+
             })   
         })
     </script>
